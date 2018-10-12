@@ -7,15 +7,18 @@
 //
 
 import UIKit
+import CoreData
 
-class CompaniesController: UITableViewController {
-    
+class CompaniesController: UITableViewController, CreateCompanyControllerDelegate {
+
     let cellID = "cellID"
-    let companies = [
-        Company(name: "Apple", founded: Date()),
-        Company(name: "Google", founded: Date()),
-        Company(name: "Samsung", founded: Date()),
-    ]
+    
+    var companies = [Company]()
+    
+    func didAddCompany(company: Company) {
+        companies.append(company)
+        tableView.insertRows(at: [IndexPath(row: companies.count - 1, section: 0)], with: .automatic)
+    }
     
     //MARK:- Setup
     
@@ -25,6 +28,7 @@ class CompaniesController: UITableViewController {
 
         setupTableView()
         setupNavigationBarItems()
+        fetchCompanies()
     }
     
     fileprivate func setupNavigationBarItems() {
@@ -41,8 +45,21 @@ class CompaniesController: UITableViewController {
     
     @objc fileprivate func handleAddCompany(){
         let createCompanyController = CreateCompanyController()
+        createCompanyController.delegate = self
         let navController = UINavigationController(rootViewController: createCompanyController)
         present(navController, animated: true)
+    }
+    
+    fileprivate func fetchCompanies(){
+        // get firmModels context
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        // get Company from Company Entity
+        let fetchRequest = NSFetchRequest<Company>(entityName: entityName)
+        do {
+            // get companies and reload to UI
+            companies = try context.fetch(fetchRequest)
+            tableView.reloadData()
+        } catch let err { print("Failed to fetch Companies :",err) }
     }
 
     //MARK:- TableView

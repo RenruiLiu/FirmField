@@ -1,5 +1,5 @@
 //
-//  Company.swift
+//  File.swift
 //  FirmField
 //
 //  Created by Renrui Liu on 12/10/18.
@@ -8,8 +8,6 @@
 
 import Foundation
 
-struct Company {
-    let name: String
-    let founded: Date
+protocol CreateCompanyControllerDelegate {
+    func didAddCompany(company: Company)
 }
-

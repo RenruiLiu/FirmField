@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // navigationbar style
         UINavigationBar.appearance().prefersLargeTitles = true
-//        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().barTintColor = .lightRed
         UINavigationBar.appearance().barStyle = .blackTranslucent
