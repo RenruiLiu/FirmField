@@ -16,6 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        // navigationbar style
+        UINavigationBar.appearance().prefersLargeTitles = true
+//        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().barTintColor = .lightRed
+        UINavigationBar.appearance().barStyle = .blackTranslucent
+        
         window = UIWindow()
         window?.makeKeyAndVisible()
         

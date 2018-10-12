@@ -13,6 +13,8 @@
 		EAFB95DC217031C700D551D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EAFB95DB217031C700D551D8 /* Assets.xcassets */; };
 		EAFB95DF217031C700D551D8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAFB95DD217031C700D551D8 /* LaunchScreen.storyboard */; };
 		EAFB95E821703EF300D551D8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFB95E721703EF300D551D8 /* Extensions.swift */; };
+		EAFB95EB21704F4200D551D8 /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFB95EA21704F4200D551D8 /* Company.swift */; };
+		EAFB95EE2170526100D551D8 /* CreateCompanyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFB95ED2170526100D551D8 /* CreateCompanyController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		EAFB95DE217031C700D551D8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EAFB95E0217031C700D551D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EAFB95E721703EF300D551D8 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		EAFB95EA21704F4200D551D8 /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
+		EAFB95ED2170526100D551D8 /* CreateCompanyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCompanyController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,9 +60,10 @@
 		EAFB95D3217031C600D551D8 /* FirmField */ = {
 			isa = PBXGroup;
 			children = (
+				EAFB95EC21704F4D00D551D8 /* Controller */,
+				EAFB95E921704F3300D551D8 /* Model */,
 				EAFB95E621703EDB00D551D8 /* Utils */,
 				EAFB95D4217031C600D551D8 /* AppDelegate.swift */,
-				EAFB95D6217031C600D551D8 /* CompaniesController.swift */,
 				EAFB95D8217031C600D551D8 /* Main.storyboard */,
 				EAFB95DB217031C700D551D8 /* Assets.xcassets */,
 				EAFB95DD217031C700D551D8 /* LaunchScreen.storyboard */,
@@ -73,6 +78,23 @@
 				EAFB95E721703EF300D551D8 /* Extensions.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		EAFB95E921704F3300D551D8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EAFB95EA21704F4200D551D8 /* Company.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EAFB95EC21704F4D00D551D8 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EAFB95D6217031C600D551D8 /* CompaniesController.swift */,
+				EAFB95ED2170526100D551D8 /* CreateCompanyController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,7 +170,9 @@
 			files = (
 				EAFB95D7217031C600D551D8 /* CompaniesController.swift in Sources */,
 				EAFB95E821703EF300D551D8 /* Extensions.swift in Sources */,
+				EAFB95EE2170526100D551D8 /* CreateCompanyController.swift in Sources */,
 				EAFB95D5217031C600D551D8 /* AppDelegate.swift in Sources */,
+				EAFB95EB21704F4200D551D8 /* Company.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
