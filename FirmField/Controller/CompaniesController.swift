@@ -10,15 +10,10 @@ import UIKit
 import CoreData
 
 class CompaniesController: UITableViewController, CreateCompanyControllerDelegate {
-
+    
     let cellID = "cellID"
     
     var companies = [Company]()
-    
-    func didAddCompany(company: Company) {
-        companies.append(company)
-        tableView.insertRows(at: [IndexPath(row: companies.count - 1, section: 0)], with: .automatic)
-    }
     
     //MARK:- Setup
     
@@ -74,10 +69,28 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         
         let company = companies[indexPath.row]
         
-        cell.textLabel?.text = company.name
+        if let name = company.name, let foundedDate = company.founded {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM dd, yyyy"
+            let founed = dateFormatter.string(from: foundedDate)
+            cell.textLabel?.text = "\(name) - Founded: \(founed)"
+        } else {
+            cell.textLabel?.text = company.name
+        }
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         return cell
+    }
+    
+
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: handleDelete)
+        deleteAction.backgroundColor = UIColor.lightRed
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: handleEdit)
+        editAction.backgroundColor = UIColor.darkBlue
+        
+        return [deleteAction,editAction]
     }
     
     // header
@@ -90,5 +103,40 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
+    
+    fileprivate func handleDelete(action: UITableViewRowAction, indexPath: IndexPath) {
+        let company = self.companies[indexPath.row]
+        self.companies.remove(at: indexPath.row)
+        self.tableView.deleteRows(at: [indexPath], with: .automatic)
+        self.deleteCompanyFromCoreData(company)
+    }
+    
+    fileprivate func deleteCompanyFromCoreData(_ company: Company){
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        context.delete(company)
+        do{
+            try context.save()
+        } catch let saveErr { print("Failed to delete:", saveErr) }
+    }
+    
+    fileprivate func handleEdit(action: UITableViewRowAction, indexPath: IndexPath){
+        let editCompanyController = CreateCompanyController()
+        editCompanyController.delegate = self
+        editCompanyController.company = companies[indexPath.row]
+        let navController = UINavigationController(rootViewController: editCompanyController)
+        present(navController, animated: true)
+    }
+    
+    func didEditCompany(company: Company) {
+        guard let row = companies.firstIndex(of: company) else {return}
+        tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
+    }
+    
+    func didAddCompany(company: Company) {
+        companies.append(company)
+        tableView.insertRows(at: [IndexPath(row: companies.count - 1, section: 0)], with: .automatic)
+    }
 }
+
+
 

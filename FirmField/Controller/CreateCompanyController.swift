@@ -11,7 +11,12 @@ import CoreData
 
 class CreateCompanyController: UIViewController {
 
-
+    var company: Company?{
+        didSet{
+            nameTextField.text = company?.name
+            datePicker.date = company?.founded ?? Date()
+        }
+    }
     
     var delegate: CreateCompanyControllerDelegate?
     
@@ -26,12 +31,21 @@ class CreateCompanyController: UIViewController {
         return tf
     }()
     
+    let datePicker: UIDatePicker = {
+        let dp = UIDatePicker()
+        dp.datePickerMode = .date
+        return dp
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Create Company"
 
         setupNavigationBarItems()
         setupViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationItem.title = company == nil ? "Create Company" : "Edit Company"
     }
     
     fileprivate func setupNavigationBarItems() {
@@ -43,13 +57,23 @@ class CreateCompanyController: UIViewController {
     @objc fileprivate func handleCancel(){
         dismiss(animated: true, completion: nil)
     }
-
+    
     @objc fileprivate func handleSave(){
-
+        if company == nil {
+            createCompany()
+        } else {
+            saveEdit()
+        }
+    }
+    
+    fileprivate func createCompany() {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         
         let company = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context)
+
+        // content to save
         company.setValue(nameTextField.text, forKey: companyNameKey)
+        company.setValue(datePicker.date, forKey: companyFounedKey)
         
         do{
             try context.save() //this context will live when the conpaniesController presents
@@ -59,16 +83,33 @@ class CreateCompanyController: UIViewController {
         } catch let err { print("Failed to save company:",err) }
     }
     
+    fileprivate func saveEdit(){
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        
+        // content to save
+        company?.name = nameTextField.text
+        company?.founded = datePicker.date
+
+        do {
+            try context.save()
+            dismiss(animated: true) {
+                self.delegate?.didEditCompany(company: self.company!)
+            }
+        } catch let err { print("Failed to edit company:",err) }
+    }
+    
     fileprivate func setupViews(){
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor.lightBlue
         
         view.addSubview(backgroundView)
-        backgroundView.anchor(top: view.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, width: 0, height: 100)
+        backgroundView.anchor(top: view.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, width: 0, height: 250)
         
         backgroundView.addSubview(nameLabel)
-        nameLabel.anchor(top: backgroundView.topAnchor, paddingTop: 16, bottom: nil, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 8, right: nil, paddingRight: 0, width: 100, height: 50)
+        nameLabel.anchor(top: backgroundView.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 8, right: nil, paddingRight: 0, width: 100, height: 50)
         backgroundView.addSubview(nameTextField)
         nameTextField.anchor(top: nameLabel.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: nameLabel.rightAnchor, paddingLeft: 4, right: backgroundView.rightAnchor, paddingRight: 8, width: 0, height: 50)
+        backgroundView.addSubview(datePicker)
+        datePicker.anchor(top: nameTextField.bottomAnchor, paddingTop: 0, bottom: backgroundView.bottomAnchor, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 0, right: backgroundView.rightAnchor, paddingRight: 0, width: 0, height: 0)
     }
 }
