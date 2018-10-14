@@ -9,16 +9,31 @@
 import UIKit
 import CoreData
 
-class CreateCompanyController: UIViewController {
+class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     var company: Company?{
         didSet{
             nameTextField.text = company?.name
             datePicker.date = company?.founded ?? Date()
+            if let imageData = company?.imageData {
+                companyImageView.image = UIImage(data: imageData)
+            }
         }
     }
     
     var delegate: CreateCompanyControllerDelegate?
+    
+    lazy var companyImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "select_photo_empty"))
+        iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectorPhoto)))
+        iv.clipsToBounds = true
+        iv.layer.cornerRadius = 50
+        iv.layer.borderColor = UIColor.darkBlue.cgColor
+        iv.layer.borderWidth = 1
+        iv.contentMode = .scaleAspectFill
+        return iv
+    }()
     
     let nameLabel: UILabel = {
         let lb = UILabel()
@@ -75,6 +90,11 @@ class CreateCompanyController: UIViewController {
         company.setValue(nameTextField.text, forKey: companyNameKey)
         company.setValue(datePicker.date, forKey: companyFounedKey)
         
+        if let companyImage = companyImageView.image {
+            let imageData = companyImage.jpegData(compressionQuality: 0.8)
+            company.setValue(imageData, forKey: companyImageDataKey)
+        }
+        
         do{
             try context.save() //this context will live when the conpaniesController presents
             dismiss(animated: true) {
@@ -89,7 +109,10 @@ class CreateCompanyController: UIViewController {
         // content to save
         company?.name = nameTextField.text
         company?.founded = datePicker.date
-
+        if let companyImage = companyImageView.image {
+            company?.imageData = companyImage.jpegData(compressionQuality: 0.8)
+        }
+        
         do {
             try context.save()
             dismiss(animated: true) {
@@ -103,13 +126,48 @@ class CreateCompanyController: UIViewController {
         backgroundView.backgroundColor = UIColor.lightBlue
         
         view.addSubview(backgroundView)
-        backgroundView.anchor(top: view.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, width: 0, height: 250)
+        backgroundView.anchor(top: view.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, width: 0, height: 350)
         
+        backgroundView.addSubview(companyImageView)
+        companyImageView.anchor(top: view.topAnchor, paddingTop: 8, bottom: nil, paddingBottom: 0, left: nil, paddingLeft: 0, right: nil, paddingRight: 0, width: 100, height: 100)
+        companyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         backgroundView.addSubview(nameLabel)
-        nameLabel.anchor(top: backgroundView.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 8, right: nil, paddingRight: 0, width: 100, height: 50)
+        nameLabel.anchor(top: companyImageView.bottomAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 8, right: nil, paddingRight: 0, width: 100, height: 50)
         backgroundView.addSubview(nameTextField)
         nameTextField.anchor(top: nameLabel.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: nameLabel.rightAnchor, paddingLeft: 4, right: backgroundView.rightAnchor, paddingRight: 8, width: 0, height: 50)
         backgroundView.addSubview(datePicker)
         datePicker.anchor(top: nameTextField.bottomAnchor, paddingTop: 0, bottom: backgroundView.bottomAnchor, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 0, right: backgroundView.rightAnchor, paddingRight: 0, width: 0, height: 0)
+    }
+    
+    @objc fileprivate func handleSelectorPhoto(){
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        present(imagePickerController, animated: true)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let editedImage = info[.editedImage] as? UIImage {
+            companyImageView.image = editedImage
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            companyImageView.image = originalImage
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+extension UIImagePickerController {
+    open override var childForStatusBarHidden: UIViewController? {
+        return nil
+    }
+    
+    open override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
