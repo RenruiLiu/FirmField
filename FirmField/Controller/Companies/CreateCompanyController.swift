@@ -65,12 +65,8 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
     
     fileprivate func setupNavigationBarItems() {
         view.backgroundColor = .darkBlue
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        setupCancelBtn()
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
-    }
-    
-    @objc fileprivate func handleCancel(){
-        dismiss(animated: true, completion: nil)
     }
     
     @objc fileprivate func handleSave(){
@@ -84,7 +80,7 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
     fileprivate func createCompany() {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         
-        let company = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context)
+        let company = NSEntityDescription.insertNewObject(forEntityName: companyKey, into: context)
 
         // content to save
         company.setValue(nameTextField.text, forKey: companyNameKey)
@@ -122,19 +118,17 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
     }
     
     fileprivate func setupViews(){
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor.lightBlue
-        
-        view.addSubview(backgroundView)
-        backgroundView.anchor(top: view.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, width: 0, height: 350)
+        let backgroundView = setupLightBlueBackgroundView()
         
         backgroundView.addSubview(companyImageView)
         companyImageView.anchor(top: view.topAnchor, paddingTop: 8, bottom: nil, paddingBottom: 0, left: nil, paddingLeft: 0, right: nil, paddingRight: 0, width: 100, height: 100)
         companyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
         backgroundView.addSubview(nameLabel)
-        nameLabel.anchor(top: companyImageView.bottomAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 8, right: nil, paddingRight: 0, width: 100, height: 50)
+        nameLabel.anchor(top: companyImageView.bottomAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 16, right: nil, paddingRight: 0, width: 100, height: 50)
         backgroundView.addSubview(nameTextField)
         nameTextField.anchor(top: nameLabel.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: nameLabel.rightAnchor, paddingLeft: 4, right: backgroundView.rightAnchor, paddingRight: 8, width: 0, height: 50)
+        
         backgroundView.addSubview(datePicker)
         datePicker.anchor(top: nameTextField.bottomAnchor, paddingTop: 0, bottom: backgroundView.bottomAnchor, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 0, right: backgroundView.rightAnchor, paddingRight: 0, width: 0, height: 0)
     }

@@ -9,7 +9,9 @@
 import Foundation
 
 let datamodelName = "FirmModels"
-let entityName = "Company"
+let companyKey = "Company"
 let companyNameKey = "name"
+let employeeNameKey = "name"
 let companyFounedKey = "founded"
 let companyImageDataKey = "imageData"
+let employeeKey = "Employee"

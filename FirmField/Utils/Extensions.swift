@@ -40,3 +40,35 @@ extension UINavigationController {
     }
 }
 
+extension UIViewController {
+    func setupPlusButnInNavBar(selector: Selector){
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image:#imageLiteral(resourceName: "plus") , style: .plain, target: self, action: selector)
+    }
+    
+    func setupCancelBtn(){
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+    }
+    
+    @objc func handleCancel(){
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func setupLightBlueBackgroundView(height: CGFloat = 350) -> UIView{
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.lightBlue
+        
+        view.addSubview(backgroundView)
+        backgroundView.anchor(top: view.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: view.leftAnchor, paddingLeft: 0, right: view.rightAnchor, paddingRight: 0, width: 0, height: height)
+        return backgroundView
+    }
+}
+
+extension DateFormatter {
+    static let myFormatter = DateFormatter.getFormatter()
+    
+    static func getFormatter() -> DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd, yyyy"
+        return dateFormatter
+    }
+}

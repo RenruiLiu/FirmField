@@ -13,9 +13,7 @@ class CompanyCell: UITableViewCell {
     var company: Company? {
         didSet{
             if let name = company?.name, let foundedDate = company?.founded {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "MMM dd, yyyy"
-                let founed = dateFormatter.string(from: foundedDate)
+                let founed = DateFormatter.myFormatter.string(from: foundedDate)
                 nameFoundedLabel.text = "\(name) - Founded: \(founed)"
             } else {
                 nameFoundedLabel.text = company?.name

@@ -23,7 +23,7 @@ class CompaniesController: UITableViewController {
 
         setupTableView()
         setupNavigationBarItems()
-        self.companies = CoreDataManager.shared.fetchCompanies()
+        companies = CoreDataManager.shared.fetchCompanies()
     }
     
     fileprivate func setupTableView() {
@@ -35,7 +35,7 @@ class CompaniesController: UITableViewController {
     }
     
     fileprivate func setupNavigationBarItems() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image:#imageLiteral(resourceName: "plus"), style: .plain, target: self, action: #selector(handleAddCompany))
+        setupPlusButnInNavBar(selector: #selector(handleAddCompany))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset))
     }
     

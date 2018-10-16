@@ -28,7 +28,7 @@ struct CoreDataManager {
         // get firmModels context
         let context = persistentContainer.viewContext
         // get Company from Company Entity
-        let fetchRequest = NSFetchRequest<Company>(entityName: entityName)
+        let fetchRequest = NSFetchRequest<Company>(entityName: companyKey)
         do {
             // get companies and reload to UI
             let companies = try context.fetch(fetchRequest)
@@ -36,6 +36,22 @@ struct CoreDataManager {
         } catch let err {
             print("Failed to fetch Companies :",err)
             return []
+        }
+    }
+    
+    func createEmployee(name: String, birthday: Date, company: Company) -> (Employee?,Error?){
+        let context = persistentContainer.viewContext
+        
+        let employee = NSEntityDescription.insertNewObject(forEntityName: employeeKey, into: context) as! Employee
+        employee.company = company
+        employee.birthday = birthday
+        employee.name = name
+
+        do{
+            try context.save()
+            return (employee, nil)
+        } catch let err {
+            return (nil,err)
         }
     }
 }

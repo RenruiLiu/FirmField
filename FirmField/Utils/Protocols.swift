@@ -12,3 +12,7 @@ protocol CreateCompanyControllerDelegate {
     func didAddCompany(company: Company)
     func didEditCompany(company: Company)
 }
+
+protocol CreateEmployeeControllerDelegate {
+    func didAddEmployee(employee: Employee)
+}
