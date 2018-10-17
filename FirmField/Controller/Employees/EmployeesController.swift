@@ -13,7 +13,9 @@ class EmployeesController: UITableViewController, CreateEmployeeControllerDelega
 
     let cellID = "cellID"
     var company : Company?
-    var employees = [Employee]()
+    
+    var employees = [[Employee]]()
+    let employeeTypes = [EmployeeType.executive.rawValue,EmployeeType.manager.rawValue,EmployeeType.staff.rawValue]
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -32,7 +34,12 @@ class EmployeesController: UITableViewController, CreateEmployeeControllerDelega
     
     fileprivate func fetchEmployees(){
         guard let companyEmployees = company?.employees?.allObjects as? [Employee] else {return}
-        employees = companyEmployees
+        employees = []
+        employeeTypes.forEach { (employeeType) in
+            employees.append(
+                companyEmployees.filter{$0.type == employeeType}
+            )
+        }
     }
     
     @objc private func handleAdd(){
@@ -43,8 +50,10 @@ class EmployeesController: UITableViewController, CreateEmployeeControllerDelega
         present(navController, animated: true)
     }
     
-    func didAddEmployee(employee: Employee) {
-        employees.append(employee)
-        tableView.insertRows(at: [IndexPath(row: employees.count - 1, section: 0)], with: .automatic)
+    func didAddEmployee(employee newEmployee: Employee) {
+        guard let section = employeeTypes.firstIndex(of: newEmployee.type!) else {return}
+        let insertionIndexPath = IndexPath(row: employees[section].count, section: section)
+        employees[section].append(newEmployee)
+        tableView.insertRows(at: [insertionIndexPath], with: .automatic)
     }
 }

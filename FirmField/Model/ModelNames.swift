@@ -15,3 +15,9 @@ let employeeNameKey = "name"
 let companyFounedKey = "founded"
 let companyImageDataKey = "imageData"
 let employeeKey = "Employee"
+
+enum EmployeeType: String {
+    case executive = "Executive"
+    case manager = "Manager"
+    case staff = "Staff"
+}

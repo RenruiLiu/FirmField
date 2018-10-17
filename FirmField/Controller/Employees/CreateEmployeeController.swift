@@ -25,13 +25,20 @@ class CreateEmployeeController: UIViewController {
     }()
     let birthdayLabel: UILabel = {
         let lb = UILabel()
-        lb.text = "Name"
+        lb.text = "Birthday"
         return lb
     }()
     let birthdayTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "MM/dd/yyyy"
         return tf
+    }()
+    let employeeTypeSedgmentedControll: UISegmentedControl = {
+        let types = [EmployeeType.executive.rawValue,EmployeeType.manager.rawValue,EmployeeType.staff.rawValue]
+        let sc = UISegmentedControl(items: types)
+        sc.selectedSegmentIndex = 0
+        sc.tintColor = .darkBlue
+        return sc
     }()
     
     override func viewDidLoad() {
@@ -46,7 +53,7 @@ class CreateEmployeeController: UIViewController {
         setupCancelBtn()
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
     
-        let backgroundView = setupLightBlueBackgroundView(height: 100)
+        let backgroundView = setupLightBlueBackgroundView(height: 150)
         
         backgroundView.addSubview(nameLabel)
         nameLabel.anchor(top: view.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 16, right: nil, paddingRight: 0, width: 100, height: 50)
@@ -56,15 +63,14 @@ class CreateEmployeeController: UIViewController {
         birthdayLabel.anchor(top: nameLabel.bottomAnchor, paddingTop: 4, bottom: nil, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 16, right: nil, paddingRight: 0, width: 100, height: 50)
         backgroundView.addSubview(birthdayTextField)
         birthdayTextField.anchor(top: birthdayLabel.topAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: birthdayLabel.rightAnchor, paddingLeft: 4, right: backgroundView.rightAnchor, paddingRight: 8, width: 0, height: 50)
+        backgroundView.addSubview(employeeTypeSedgmentedControll)
+        employeeTypeSedgmentedControll.anchor(top: birthdayLabel.bottomAnchor, paddingTop: 0, bottom: nil, paddingBottom: 0, left: backgroundView.leftAnchor, paddingLeft: 16, right: backgroundView.rightAnchor, paddingRight: 16, width: 0, height: 34)
     }
     
     @objc fileprivate func handleSave(){
         guard let employeeName = nameTextField.text else {return}
         guard let company = company else {return}
         guard let birthdayText = birthdayTextField.text else {return}
-        
-        // form validation
-        
         
         // cast text into a Date
         let dateFormatter = DateFormatter()
@@ -76,7 +82,9 @@ class CreateEmployeeController: UIViewController {
             return
         }
         
-        let (employee,err) = CoreDataManager.shared.createEmployee(name: employeeName, birthday: birthdayDate, company: company)
+        guard let employeeType = employeeTypeSedgmentedControll.titleForSegment(at: employeeTypeSedgmentedControll.selectedSegmentIndex) else {return}
+        
+        let (employee,err) = CoreDataManager.shared.createEmployee(name: employeeName, birthday: birthdayDate, employeeType: employeeType, company: company)
         if let err = err {
             print("Failed to save employee:",err)
         } else {
