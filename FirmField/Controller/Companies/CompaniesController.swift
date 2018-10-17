@@ -52,8 +52,6 @@ class CompaniesController: UITableViewController {
                 indexPathsToRemove.append(indexPath)
             }
             companies.removeAll()
-            tableView.deleteRows(at: indexPathsToRemove, with: .automatic)
-//            tableView.reloadData()
         } catch let err { print("Failed to delete objects from Coredata:", err) }
     }
     
@@ -62,6 +60,50 @@ class CompaniesController: UITableViewController {
         createCompanyController.delegate = self
         let navController = UINavigationController(rootViewController: createCompanyController)
         present(navController, animated: true)
+    }
+    
+    
+    func doNestedUpdates(){
+        
+        // 1. in background thread
+        DispatchQueue.global(qos: .background).async {
+            
+            // 2.create a private context which is main context's child
+            let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            privateContext.parent = CoreDataManager.shared.persistentContainer.viewContext
+            
+            // 3. execute updates
+            let request: NSFetchRequest<Company> = Company.fetchRequest()
+            request.fetchLimit = 1
+            do {
+                // 3.1 fetch companies
+                let companies = try privateContext.fetch(request)
+                // 3.2 update companies
+                companies.forEach({ (company) in
+                    company.name = "D:\(company.name ?? "")"
+                })
+                
+                // 4. save
+                do{
+                    // 4.1 save to main context
+                    try privateContext.save()
+                    
+                    // 4.2 get back to main thread
+                    DispatchQueue.main.async {
+                        do {
+                            // 4.3 save to persistent store
+                            let context = CoreDataManager.shared.persistentContainer.viewContext
+                            if context.hasChanges {
+                                try context.save()
+                            }
+                            
+                            // 4.4 reload UI
+                            self.tableView.reloadData()
+                        } catch let err {print("failed to save update to persistent store:",err)}
+                    }
+                } catch let err {print("failed to save update to main context:",err)}
+            } catch let err {print("failed to fetch on private context:",err)}
+        }
     }
 }
 

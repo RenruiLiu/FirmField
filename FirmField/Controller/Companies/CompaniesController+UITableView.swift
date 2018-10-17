@@ -8,26 +8,29 @@
 
 import UIKit
 
-extension CompaniesController {
+extension CompaniesAutoUpdateController {
     
     //MARK:- TableView
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let employeesController = EmployeesController()
-        let company = companies[indexPath.row]
-        employeesController.company = company
+        employeesController.company = fetchedResultsController.object(at: indexPath)
         navigationController?.pushViewController(employeesController, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return companies.count
+        return fetchedResultsController.sections![section].numberOfObjects
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! CompanyCell
-        cell.company = companies[indexPath.row]
+        cell.company = fetchedResultsController.object(at: indexPath)
         return cell
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return (fetchedResultsController.sections?.count) ?? 0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -36,9 +39,10 @@ extension CompaniesController {
 
     // header
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .lightBlue
-        return view
+        let lb = IndentedLabel()
+        lb.text = fetchedResultsController.sectionIndexTitles[section]
+        lb.backgroundColor = .lightBlue
+        return lb
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -56,7 +60,7 @@ extension CompaniesController {
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return companies.count == 0 ? 150 : 0
+        return fetchedResultsController.sections![section].numberOfObjects == 0 ? 150 : 0
     }
 
     
@@ -71,9 +75,9 @@ extension CompaniesController {
     }
     
     fileprivate func handleDelete(action: UITableViewRowAction, indexPath: IndexPath) {
-        let company = self.companies[indexPath.row]
-        self.companies.remove(at: indexPath.row)
-        self.tableView.deleteRows(at: [indexPath], with: .automatic)
+        let company = fetchedResultsController.object(at: indexPath)
+        //        self.companies.remove(at: indexPath.row)
+//        self.tableView.deleteRows(at: [indexPath], with: .automatic)
         self.deleteCompanyFromCoreData(company)
     }
     
@@ -87,8 +91,7 @@ extension CompaniesController {
     
     fileprivate func handleEdit(action: UITableViewRowAction, indexPath: IndexPath){
         let editCompanyController = CreateCompanyController()
-        editCompanyController.delegate = self
-        editCompanyController.company = companies[indexPath.row]
+        editCompanyController.company = fetchedResultsController.object(at: indexPath)
         let navController = UINavigationController(rootViewController: editCompanyController)
         present(navController, animated: true)
     }

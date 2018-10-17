@@ -80,22 +80,21 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
     fileprivate func createCompany() {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         
-        let company = NSEntityDescription.insertNewObject(forEntityName: companyKey, into: context)
+        let company = Company(context: context)
 
         // content to save
-        company.setValue(nameTextField.text, forKey: companyNameKey)
-        company.setValue(datePicker.date, forKey: companyFounedKey)
+        company.name = nameTextField.text
+        company.founded = datePicker.date
         
         if let companyImage = companyImageView.image {
             let imageData = companyImage.jpegData(compressionQuality: 0.8)
-            company.setValue(imageData, forKey: companyImageDataKey)
+            company.imageData = imageData
         }
         
         do{
             try context.save() //this context will live when the conpaniesController presents
-            dismiss(animated: true) {
-                self.delegate?.didAddCompany(company: company as! Company)
-            }
+            print("Saved")
+            dismiss(animated: true)
         } catch let err { print("Failed to save company:",err) }
     }
     
@@ -111,9 +110,7 @@ class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate
         
         do {
             try context.save()
-            dismiss(animated: true) {
-                self.delegate?.didEditCompany(company: self.company!)
-            }
+            dismiss(animated: true)
         } catch let err { print("Failed to edit company:",err) }
     }
     
