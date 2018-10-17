@@ -60,7 +60,7 @@ extension CompaniesAutoUpdateController {
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return fetchedResultsController.sections![section].numberOfObjects == 0 ? 150 : 0
+        return fetchedResultsController.sections?.count == 0 ? 150 : 0
     }
 
     

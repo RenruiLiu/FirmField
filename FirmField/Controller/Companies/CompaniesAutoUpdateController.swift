@@ -84,7 +84,6 @@ class CompaniesAutoUpdateController: UITableViewController, NSFetchedResultsCont
         case .insert:
             tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
         case .delete:
-            print("deleted section")
             tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
         case .move:
             break
@@ -99,7 +98,6 @@ class CompaniesAutoUpdateController: UITableViewController, NSFetchedResultsCont
         case .insert:
             tableView.insertRows(at: [newIndexPath!], with: .fade)
         case .delete:
-            print("deleted row")
             tableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
             tableView.reloadRows(at: [indexPath!], with: .fade)
@@ -112,6 +110,7 @@ class CompaniesAutoUpdateController: UITableViewController, NSFetchedResultsCont
         tableView.endUpdates()
     }
     
+    // handle each section's title
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, sectionIndexTitleForSectionName sectionName: String) -> String? {
         return sectionName
     }
