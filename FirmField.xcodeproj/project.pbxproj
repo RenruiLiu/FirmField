@@ -18,6 +18,7 @@
 		EAFB720A21757CC700342C13 /* CreateEmployeeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFB720921757CC700342C13 /* CreateEmployeeController.swift */; };
 		EAFB720C21758E7300342C13 /* EmployeesController+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFB720B21758E7300342C13 /* EmployeesController+UITableView.swift */; };
 		EAFB721021771E8B00342C13 /* CompaniesAutoUpdateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFB720F21771E8B00342C13 /* CompaniesAutoUpdateController.swift */; };
+		EAFB721221782E2600342C13 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFB721121782E2600342C13 /* Service.swift */; };
 		EAFB95D5217031C600D551D8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFB95D4217031C600D551D8 /* AppDelegate.swift */; };
 		EAFB95D7217031C600D551D8 /* CompaniesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFB95D6217031C600D551D8 /* CompaniesController.swift */; };
 		EAFB95DA217031C600D551D8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EAFB95D8217031C600D551D8 /* Main.storyboard */; };
@@ -42,6 +43,8 @@
 		EAFB720921757CC700342C13 /* CreateEmployeeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEmployeeController.swift; sourceTree = "<group>"; };
 		EAFB720B21758E7300342C13 /* EmployeesController+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmployeesController+UITableView.swift"; sourceTree = "<group>"; };
 		EAFB720F21771E8B00342C13 /* CompaniesAutoUpdateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompaniesAutoUpdateController.swift; sourceTree = "<group>"; };
+		EAFB721121782E2600342C13 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		EAFB721321783A0600342C13 /* FirmModels 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "FirmModels 2.xcdatamodel"; sourceTree = "<group>"; };
 		EAFB95D1217031C600D551D8 /* FirmField.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirmField.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAFB95D4217031C600D551D8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EAFB95D6217031C600D551D8 /* CompaniesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompaniesController.swift; sourceTree = "<group>"; };
@@ -153,6 +156,7 @@
 				EAFB71FE21707F8C00342C13 /* CoreDataManager.swift */,
 				EAFB71FB2170761500342C13 /* FirmModels.xcdatamodeld */,
 				EAFB95EA21704F4200D551D8 /* ModelNames.swift */,
+				EAFB721121782E2600342C13 /* Service.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -281,6 +285,7 @@
 				EAFB72012174179600342C13 /* CompanyCell.swift in Sources */,
 				EAFB95EE2170526100D551D8 /* CreateCompanyController.swift in Sources */,
 				EAFB720A21757CC700342C13 /* CreateEmployeeController.swift in Sources */,
+				EAFB721221782E2600342C13 /* Service.swift in Sources */,
 				EAFB72082175633600342C13 /* EmployeesController.swift in Sources */,
 				EAFB95D5217031C600D551D8 /* AppDelegate.swift in Sources */,
 				EAFB721021771E8B00342C13 /* CompaniesAutoUpdateController.swift in Sources */,
@@ -493,9 +498,10 @@
 		EAFB71FB2170761500342C13 /* FirmModels.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				EAFB721321783A0600342C13 /* FirmModels 2.xcdatamodel */,
 				EAFB71FC2170761500342C13 /* FirmModels.xcdatamodel */,
 			);
-			currentVersion = EAFB71FC2170761500342C13 /* FirmModels.xcdatamodel */;
+			currentVersion = EAFB721321783A0600342C13 /* FirmModels 2.xcdatamodel */;
 			path = FirmModels.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

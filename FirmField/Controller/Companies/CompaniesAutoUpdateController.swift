@@ -13,8 +13,6 @@ class CompaniesAutoUpdateController: UITableViewController, NSFetchedResultsCont
     
     let cellID = "cellID"
     
-    //var companies = [Company]()
-    
     //MARK:- Setup
     
     override func viewDidLoad() {
@@ -23,10 +21,19 @@ class CompaniesAutoUpdateController: UITableViewController, NSFetchedResultsCont
         
         setupTableView()
         setupNavigationBarItems()
-        fetchedResultsController.fetchedObjects?.forEach({ (c) in
-            print(c.name ?? "")
-        })
-        //companies = CoreDataManager.shared.fetchCompanies()
+        setupRefreshControl()
+    }
+    
+    fileprivate func setupRefreshControl(){
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        refreshControl.tintColor = .white
+        self.refreshControl = refreshControl
+    }
+    
+    @objc fileprivate func handleRefresh(){
+        Service.shared.downloadCompaniesFromServer()
+        refreshControl?.endRefreshing()
     }
     
     fileprivate func setupTableView() {
@@ -39,7 +46,7 @@ class CompaniesAutoUpdateController: UITableViewController, NSFetchedResultsCont
     
     fileprivate func setupNavigationBarItems() {
         setupPlusButnInNavBar(selector: #selector(handleAddCompany))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset))
+        navigationItem.leftBarButtonItems = [UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset))]
     }
     
     @objc fileprivate func handleReset(){
