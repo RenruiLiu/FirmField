@@ -11,7 +11,7 @@
 2. multithreading   
 <kbd><img src="https://letsbuildthatapp-videos.s3-us-west-2.amazonaws.com/117f0780-30eb-4fc6-813d-231b8204f224" width="550"/></kbd>  
 3. CoreData migration
-4. Json to CoreData
+4. Json to CoreData  
 
 # TODO
 
